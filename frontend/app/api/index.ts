@@ -11,7 +11,7 @@ import type {
   MessageResponse
 } from '~/types';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = 'http://localhost:3001/api';
 
 // Create request/response logger
 const logRequest = (config: any) => {

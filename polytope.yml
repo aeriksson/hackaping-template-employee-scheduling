@@ -4,22 +4,9 @@ templates:
   - api
   - couchbase
   - init-couchbase
-  - kong
   - frontend
 
 modules:
-  - id: kong
-    module: polytope/kong!simple
-    args:
-      port: 3000
-      config-file: { type: host, path: ./conf/components/kong/dev.yml }
-      autoreload: true
-      services:
-        - { id: kong, ports: [{ port: 3000, protocol: http }]}
-      env:
-        - { name: KONG_LOG_LEVEL, value: warn }
-        - { name: KONG_PROXY_ACCESS_LOG, value: /dev/null }
-
   - id: api
     module: polytope/python
     params:
@@ -57,14 +44,14 @@ modules:
       code: { type: host, path: ./frontend }
       cmd: ./bin/run
       env:
-        - { name: PORT, value: 3002 }
-        - { name: REACT_APP_API_BASE_URL, value: "http://localhost:3000" }
+        - { name: PORT, value: 3000 }
+        - { name: REACT_APP_API_BASE_URL, value: "http://localhost:3001" }
         - { name: PUBLIC_URL, value: "http://localhost:3000" }
       restart:
         policy: always
       services:
         - id: frontend
-          ports: [{protocol: http, port: 3002, expose-as: 3002}]
+          ports: [{protocol: http, port: 3000}]
       mounts:
         - { path: /root/.cache/, source: { type: volume, scope: project, id: dependency-cache }}
         - { path: /root/.npm/, source: { type: volume, scope: project, id: npm-cache }}
